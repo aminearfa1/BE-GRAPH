@@ -32,10 +32,38 @@ public class Path {
      * 
      * @deprecated Need to be implemented.
      */
-    public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
+	public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+    	    
+        if(nodes.size() == 0) {
+        	return new Path(graph);
+        }
+        if(nodes.size() == 1) {
+        	return new Path(graph, nodes.get(0) );
+        }
+        
+        Arc currentArc = null;
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        double travelTime = 9999;
+        
+        //Get the arc with the minimum travel time for each node
+        for(int i=0; i<nodes.size()-1;i++) {
+	    	for(Arc a : nodes.get(i).getSuccessors()) {
+	    		if(a.getMinimumTravelTime() < travelTime 
+	    				&& a.getDestination().equals(nodes.get(i+1))  ) {
+	    			currentArc = a;
+	    			travelTime = a.getMinimumTravelTime();
+	    		}
+	    	}
+	    	//raise an exception if two consecutive arcs are not linked 
+	    	if(currentArc == null) {
+	    		throw new IllegalArgumentException();
+	    	}	
+	    	arcs.add(currentArc);
+	    	travelTime = 9999;
+	    	currentArc = null;
+        }
+          
         return new Path(graph, arcs);
     }
 
@@ -53,10 +81,40 @@ public class Path {
      * 
      * @deprecated Need to be implemented.
      */
-    public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
+	public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+    	
+       
+        
+        if(nodes.size() == 0) {
+        	return new Path(graph);
+        }
+        if(nodes.size() == 1) {
+        	return new Path(graph, nodes.get(0) );
+        }
+        
+        Arc currentArc = null;
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        float distanceMin = 9999;
+        
+        //Get the arc with the minimal distance for each node
+        for(int i=0; i<nodes.size()-1;i++) {
+	    	for(Arc a : nodes.get(i).getSuccessors()) {
+	    		if(a.getLength() < distanceMin 
+	    				&& a.getDestination().equals(nodes.get(i+1))  ) {
+	    			currentArc = a;	
+	    			distanceMin = a.getLength();
+	    		}	
+	    	}
+	    	//raise an exception if two consecutive arcs are not linked 
+	    	if(currentArc == null) {
+	    		throw new IllegalArgumentException();
+	    	}	
+	    	arcs.add(currentArc);
+	    	distanceMin = 9999;
+	    	currentArc = null;
+        }
+        
         return new Path(graph, arcs);
     }
 
