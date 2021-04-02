@@ -201,9 +201,24 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public boolean isValid() {
-        // TODO:
+        // vérifié:
+    	if (this.isEmpty()) {
+    		return true;}
+    	if (this.size()==1) {
+    		return true;}
+    	if (this.size()>1) {
+    		if (arcs.get(0).getOrigin() != origin) {
+    			return false;}
+    		int i;
+    		for(i=1;i<this.size()-1;i++) {
+    			if (arcs.get(i).getOrigin() != arcs.get(i-1).getDestination()) {
+    				return false;}
+    		}
+    		return true;
+    	}
         return false;
     }
+
 
     /**
      * Compute the length of this path (in meters).
@@ -213,8 +228,12 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public float getLength() {
-        // TODO:
-        return 0;
+        // vérifié:
+    	float length = 0;
+    	for (Arc arc : this.arcs) {
+			length += arc.getLength();
+		}
+        return length;
     }
 
     /**
@@ -228,8 +247,12 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public double getTravelTime(double speed) {
-        // TODO:
-        return 0;
+        // DONE:
+    	float time = 0;
+    	for (Arc arc : this.arcs) {
+			time += arc.getTravelTime(speed);
+		}
+        return time;
     }
 
     /**
@@ -241,8 +264,12 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+        // DONE:
+    	float mintime = 0;
+    	for (Arc arc : this.arcs) {
+			mintime += arc.getTravelTime(arc.getRoadInformation().getMaximumSpeed());
+		}
+        return mintime;
     }
 
 }
