@@ -1,9 +1,7 @@
 package org.insa.graphs.model;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 /**
  * <p>
  * Class representing a path between nodes in a graph.
