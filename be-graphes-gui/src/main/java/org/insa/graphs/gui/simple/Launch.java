@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -14,6 +13,7 @@ import org.insa.graphs.gui.drawing.components.BasicDrawing;
 import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Path;
 import org.insa.graphs.model.io.BinaryGraphReader;
+import org.insa.graphs.model.io.BinaryPathReader;
 import org.insa.graphs.model.io.GraphReader;
 import org.insa.graphs.model.io.PathReader;
 
@@ -46,28 +46,41 @@ public class Launch {
     public static void main(String[] args) throws Exception {
 
         // Visit these directory to see the list of available files on Commetud.
-        final String mapName = "/home/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
-        final String pathName = "/home/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31insa_rangueil_r2.path";
-
-        // Create a graph reader.
-        final GraphReader reader = new BinaryGraphReader(
-                new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
+        final String mapName = "/home/arfa/INSA/maps/insa.mapgr";
+        final String pathName = "/home/arfa/INSA/maps/path_fr31insa_rangueil_insa.path";
 
         // TODO: Read the graph.
-        final Graph graph = null;
+        final Graph graph; 
 
         // Create the drawing:
-        final Drawing drawing = createDrawing();
+        final Drawing drawing;
 
-        // TODO: Draw the graph on the drawing.
+
+        try (GraphReader reader = new BinaryGraphReader(new DataInputStream(
+                new BufferedInputStream(new FileInputStream(mapName))))) {
+
+            // TODO: Read the graph.
+            graph = reader.read();
+
+            // Create the drawing:
+            drawing = createDrawing();
+
+            // TODO: Draw the graph on the drawing.
+            drawing.drawGraph(graph);
+        }
 
         // TODO: Create a PathReader.
-        final PathReader pathReader = null;
+        try (PathReader pathReader = new BinaryPathReader(
+        		new DataInputStream( new BufferedInputStream(new FileInputStream(pathName))))) {
 
-        // TODO: Read the path.
-        final Path path = null;
+        	   // TODO: Read the path.
+            final Path path = pathReader.readPath(graph);
 
-        // TODO: Draw the path.
+            // TODO: Draw the path.
+            drawing.drawPath(path);
+
+        }
     }
+      
 
 }
