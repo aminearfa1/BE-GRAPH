@@ -1,6 +1,9 @@
 package org.insa.graphs.algorithm.utils;
-
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Implements a binary heap containing elements of type E.
@@ -134,10 +137,41 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         this.arraySet(index, x);
         this.percolateUp(index);
     }
-
+    /**
+     * Remove the element x from the array if it exists
+     * Raise ElementNotFoundException otherwise
+     */
     @Override
     public void remove(E x) throws ElementNotFoundException {
-        // TODO:
+    	
+    	
+    	if(this.isEmpty() || x == null){
+        	throw new ElementNotFoundException(x);
+        }
+        
+        int index = -1;
+        //Iterate over the array and check if the x exists
+        for(int i=0; i<this.currentSize;i++) {
+        	if(this.array.get(i).equals(x)) {
+        		index = i;
+        		break;
+        	}
+        }
+        
+    	
+    	if(index == -1) {
+        	throw new ElementNotFoundException(x);
+        }
+    	
+
+    	 
+    	//If it exists, it is replaced by the "last" element
+        E lastItem = this.array.get(--this.currentSize);
+        this.arraySet(index, lastItem);
+        //The switched element is then sorted
+        this.percolateDown(index);
+        this.percolateUp(index);
+        
     }
 
     @Override
