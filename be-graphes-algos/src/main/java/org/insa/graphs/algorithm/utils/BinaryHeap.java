@@ -147,7 +147,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         }
         
         int index = -1;
-        //Iterate over the array and check if the x exists
+        //Iterate over the array and check if the x exists.
         for(int i=0; i<this.currentSize;i++) {
         	if(this.array.get(i).equals(x)) {
         		index = i;
