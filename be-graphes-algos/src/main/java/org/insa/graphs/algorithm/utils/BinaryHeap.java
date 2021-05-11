@@ -158,7 +158,6 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     	if(index == -1) {
         	throw new ElementNotFoundException(x);
         }
-    	 
     	//If it exists, it is replaced by the "last" element
         E lastItem = this.array.get(--this.currentSize);
         this.arraySet(index, lastItem);
