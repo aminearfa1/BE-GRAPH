@@ -148,5 +148,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	protected Label createLabelOrigin(ShortestPathData data) {
 		return new Label(data.getOrigin(), 0, null);
 	}
+	//fin des tests de l'algorithme.
 
 }
