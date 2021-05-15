@@ -1,6 +1,10 @@
 package org.insa.graphs.algorithm.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Implements a binary heap containing elements of type E.
@@ -11,6 +15,8 @@ import java.util.ArrayList;
  * @author Mark Allen Weiss
  * @author DLB
  */
+
+
 public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
 
     // Number of elements in heap.
@@ -18,6 +24,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
 
     // The heap array.
     protected final ArrayList<E> array;
+    
 
     /**
      * Construct a new empty binary heap.
@@ -25,6 +32,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     public BinaryHeap() {
         this.currentSize = 0;
         this.array = new ArrayList<E>();
+
     }
 
     /**
@@ -50,7 +58,9 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         else {
             this.array.set(index, value);
         }
+       
     }
+    
 
     /**
      * @return Index of the parent of the given index.
@@ -73,14 +83,13 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
      */
     private void percolateUp(int index) {
         E x = this.array.get(index);
-
         for (; index > 0
                 && x.compareTo(this.array.get(indexParent(index))) < 0; index = indexParent(
                         index)) {
             E moving_val = this.array.get(indexParent(index));
             this.arraySet(index, moving_val);
         }
-
+        
         this.arraySet(index, x);
     }
 
@@ -92,7 +101,7 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     private void percolateDown(int index) {
         int ileft = indexLeft(index);
         int iright = ileft + 1;
-
+        
         if (ileft < this.currentSize) {
             E current = this.array.get(index);
             E left = this.array.get(ileft);
@@ -102,16 +111,22 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
             if (!hasRight || left.compareTo(right) < 0) {
                 // Left is smaller
                 if (left.compareTo(current) < 0) {
-                    this.arraySet(index, left);
+                    
+                	this.arraySet(index, left);
+                    
                     this.arraySet(ileft, current);
+                    
                     this.percolateDown(ileft);
                 }
             }
             else {
                 // Right is smaller
                 if (right.compareTo(current) < 0) {
+                	
                     this.arraySet(index, right);
+                    
                     this.arraySet(iright, current);
+                    
                     this.percolateDown(iright);
                 }
             }
@@ -134,11 +149,12 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         this.arraySet(index, x);
         this.percolateUp(index);
     }
+
+    @Override
     /**
      * Remove the element x from the array if it exists
      * Raise ElementNotFoundException otherwise
      */
-    @Override
     public void remove(E x) throws ElementNotFoundException {
     	
     	
@@ -147,17 +163,21 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         }
         
         int index = -1;
-        //Iterate over the array and check if the x exists.
+//       Iterate over the array and check if the x exists
         for(int i=0; i<this.currentSize;i++) {
         	if(this.array.get(i).equals(x)) {
         		index = i;
         		break;
         	}
-        }        
+        }
+        
     	
     	if(index == -1) {
         	throw new ElementNotFoundException(x);
         }
+    	
+
+    	 
     	//If it exists, it is replaced by the "last" element
         E lastItem = this.array.get(--this.currentSize);
         this.arraySet(index, lastItem);
@@ -183,6 +203,55 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
         return minItem;
     }
 
+   
+    /**
+     * Check that the binary heap is valid
+     * 
+     * @return a boolean indicating whether the tree is valid
+     */
+    public boolean isValid() {
+    	E current;
+    	E parent;
+    	for(int i=1; i<this.currentSize;  i++) {
+    		current = this.array.get(i);
+    		parent = this.array.get(this.indexParent(i));
+    		if( current.compareTo(parent) < 0) {
+    			return false;
+    		}	
+    	}
+    	return true;
+    }
+    
+    
+    /**
+     * Update the element x in the heap if it exists
+     * Raise ElementNotFoundException otherwise
+     */
+    public void miseAJour(E x) throws ElementNotFoundException {
+    	
+    	if(this.isEmpty() || x == null){
+        	throw new ElementNotFoundException(x);
+        }
+        
+        int index = -1;
+//        Iterate over the array and check if the x exists
+        for(int i=0; i<this.currentSize;i++) {
+        	if(this.array.get(i).equals(x)) {
+        		index = i;
+        		break;
+        	}
+        }
+        
+    	if(index == -1) {
+        	throw new ElementNotFoundException(x);
+        }
+    	
+
+        this.percolateDown(index);
+        this.percolateUp(index);
+        
+    }
+    
     /**
      * Creates a multi-lines string representing a sorted view of this binary heap.
      * 

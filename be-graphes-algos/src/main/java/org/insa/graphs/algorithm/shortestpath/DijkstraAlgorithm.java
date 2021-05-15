@@ -13,6 +13,8 @@ import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
 
+
+
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
 	public DijkstraAlgorithm(ShortestPathData data) {
