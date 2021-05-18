@@ -1,7 +1,9 @@
 package org.insa.graphs.model;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 /**
  * <p>
  * Class representing a path between nodes in a graph.
@@ -27,10 +29,8 @@ public class Path {
      * 
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
-     * 
-     * @deprecated Need to be implemented.
      */
-	public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
+    public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
     	    
         if(nodes.size() == 0) {
@@ -76,10 +76,8 @@ public class Path {
      * 
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
-     * 
-     * @deprecated Need to be implemented.
      */
-	public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
+    public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
     	
        
@@ -253,43 +251,42 @@ public class Path {
      * </ul>
      * 
      * @return true if the path is valid, false otherwise.
-     * 
-     * @deprecated Need to be implemented.
      */
     public boolean isValid() {
-        // vérifié:
-    	if (this.isEmpty()) {
-    		return true;}
-    	if (this.size()==1) {
-    		return true;}
-    	if (this.size()>1) {
-    		if (arcs.get(0).getOrigin() != origin) {
-    			return false;}
-    		int i;
-    		for(i=1;i<this.size()-1;i++) {
-    			if (arcs.get(i).getOrigin() != arcs.get(i-1).getDestination()) {
-    				return false;}
-    		}
-    		return true;
-    	}
-        return false;
+        if(this.isEmpty()) {
+        	return true;
+        }
+        if(this.origin != null && this.arcs.isEmpty()) {
+        	return true;
+        }
+        
+        if(!this.arcs.get(0).getOrigin().equals(this.getOrigin()) ) {
+        	return false;
+        }
+        if(!this.arcs.get(this.arcs.size() -1 ).getDestination().equals(this.getDestination()) ) {
+        	return false;
+        }
+        
+        for(int i=0;i<this.arcs.size()-1; i++) {
+        	if(!this.arcs.get(i).getDestination().equals(this.arcs.get(i+1).getOrigin()) )  {
+        		return false;
+        	}
+        }
+        
+        return true;
     }
-
 
     /**
      * Compute the length of this path (in meters).
      * 
      * @return Total length of the path (in meters).
-     * 
-     * @deprecated Need to be implemented.
      */
     public float getLength() {
-        // vérifié:
-    	float length = 0;
-    	for (Arc arc : this.arcs) {
-			length += arc.getLength();
-		}
-        return length;
+        float res = 0.0f;
+        for(Arc a : this.arcs) {
+        	res+= a.getLength();
+        }
+        return res;
     }
 
     /**
@@ -299,16 +296,13 @@ public class Path {
      * 
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
-     * 
-     * @deprecated Need to be implemented.
      */
     public double getTravelTime(double speed) {
-        // DONE:
-    	float time = 0;
-    	for (Arc arc : this.arcs) {
-			time += arc.getTravelTime(speed);
-		}
-        return time;
+    	 float res = 0.0f;
+         for(Arc a : this.arcs) {
+         	res+= a.getTravelTime(speed);
+         }
+        return res;//this.getLength()/(speed/3.6f);
     }
 
     /**
@@ -316,16 +310,13 @@ public class Path {
      * on every arc.
      * 
      * @return Minimum travel time to travel this path (in seconds).
-     * 
-     * @deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // DONE:
-    	float mintime = 0;
-    	for (Arc arc : this.arcs) {
-			mintime += arc.getTravelTime(arc.getRoadInformation().getMaximumSpeed());
-		}
-        return mintime;
+    	double res = 0.0f;
+        for(Arc a : this.arcs) {
+        	res+= a.getMinimumTravelTime();
+        }
+        return res;
     }
 
 }
